@@ -39,11 +39,11 @@ final class Photo{
 final class Quest{
     var title:String
     var phots:[Photo]
-    var tags:[String]
+    var tags:[TagSet]
     var favorite:Bool
     var clear:Bool
     
-    init(title: String, phots: [Photo], tags: [String], favorite: Bool, clear: Bool) {
+    init(title: String, phots: [Photo], tags: [TagSet], favorite: Bool, clear: Bool) {
         self.title = title
         self.phots = phots
         self.tags = tags
