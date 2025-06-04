@@ -1,6 +1,6 @@
 import Foundation
 
-enum TagSet:String{
+enum TagSet:String,CaseIterable, Codable{
     case kantan = "かんたん"
     case genki = "元気"
     case cool = "クール"
