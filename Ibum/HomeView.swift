@@ -1,11 +1,5 @@
-//
-//  HomeView.swift
-//  Ibum
-//
-//  Created by tanaka niko on 2025/06/04.
-//
-
 import SwiftUI
+import SwiftData
 import AVFoundation
 
 struct HomeView: View {

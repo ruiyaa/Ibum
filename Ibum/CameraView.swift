@@ -4,6 +4,8 @@ import SwiftUI
 
 class CameraViewController: UIViewController{
     
+    var quest:String = ""
+    
     override func viewDidLoad(){
         super.viewDidLoad()
         
@@ -124,6 +126,7 @@ class CameraViewController: UIViewController{
         shutterButton.layer.borderWidth = 5
         shutterButton.clipsToBounds = true
         shutterButton.layer.cornerRadius = min(shutterButton.frame.width, shutterButton.frame.height) / 2
+        shutterButton.addTarget(self, action: #selector(buttonTopped), for: .touchUpInside)
         self.view.addSubview(shutterButton)
         
         //ボタンにautolayoutを設定
@@ -136,16 +139,46 @@ class CameraViewController: UIViewController{
         captureSession.startRunning()
         
     }
+    
+    @objc func buttonTopped(){
+        let settings = AVCapturePhotoSettings()
+        // フラッシュの設定
+        settings.flashMode = .auto
+//        // カメラの手ぶれ補正
+//        settings.
+        // 撮影された画像をdelegateメソッドで処理
+//        let image =AVCapturePhotoOutput(session: captureSession)
+        self.photoOutput?.capturePhoto(with: settings, delegate: self as AVCapturePhotoCaptureDelegate)
+        
+    }
 
 
 }
 
+extension CameraViewController: AVCapturePhotoCaptureDelegate{
+    // 撮影した画像データが生成されたときに呼び出されるデリゲートメソッド
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        if let imageData = photo.fileDataRepresentation() {
+            // Data型をUIImageオブジェクトに変換
+            let uiImage = UIImage(data: imageData)!
+//            // 写真ライブラリに画像を保存
+//            UIImageWriteToSavedPhotosAlbum(uiImage!, nil,nil,nil)
+            let controller = UIHostingController(rootView: PhotoTrimmingView(image: uiImage))
+            controller.modalPresentationStyle = .overFullScreen
+            present(controller, animated: true)
+
+        }
+    }
+}
+
 struct CameraView: UIViewControllerRepresentable {
+//    @Binding var quest:String
     
     // UIViewControllerを作成するメソッド
         func makeUIViewController(context: Context) -> UIViewController {
             // 指定のUIViewControllerを作成する
             let cameraViewController: UIViewController = CameraViewController()
+//            cameraViewController.quest = quest
             return cameraViewController
         }
 
