@@ -1,10 +1,3 @@
-//
-//  IbumApp.swift
-//  Ibum
-//
-//  Created by tanaka niko on 2025/05/30.
-//
-
 import SwiftUI
 import SwiftData
 
@@ -15,7 +8,7 @@ struct IbumApp: App {
     var body: some Scene {
         WindowGroup {
             HomeView()
-                .modelContainer(for: [Quest.self,Photo.self])
+                .modelContainer(for: [Quest.self,Photo.self],inMemory:true,isAutosaveEnabled: true)
         }
         
     }

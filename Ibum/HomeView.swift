@@ -56,6 +56,7 @@ struct HomeView: View {
                             if status == AVAuthorizationStatus.authorized {
                                 questTitle = quest.title
                                 flag = true
+                                print(quests.first)
                             }else{
                                 AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
                                 })
@@ -71,7 +72,6 @@ struct HomeView: View {
                 if quests.isEmpty{
                     for item in questdatabase.items{
                         context.insert(item)
-                        
                     }
                 }
                 do{

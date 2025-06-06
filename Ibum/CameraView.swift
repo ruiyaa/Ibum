@@ -1,6 +1,7 @@
 import AVFoundation
 import UIKit
 import SwiftUI
+import SwiftData
 
 class CameraViewController: UIViewController{
     

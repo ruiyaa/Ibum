@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 
 enum TagSet:String,CaseIterable, Codable{
     case kantan = "かんたん"
