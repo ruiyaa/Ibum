@@ -14,7 +14,7 @@ struct PhotoTrimmingView: View {
     @State var position: CGPoint = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
     
     @State var image:UIImage
-    @State static var questTitle:String = "笑顔でピース"
+    @State var questTitle:String = "笑顔でピース"
     
    
 
@@ -103,29 +103,29 @@ struct PhotoTrimmingView: View {
         }
     }
     
-    //　questの名前が一致するものを取得する
-    static func sameNameQuest(nametitle:String) -> Predicate<Quest> {
-        #Predicate<Quest> { quest in
-            return quest.title == nametitle
-        }
-    }
-    
-    @Environment(\.modelContext) private var context
-    @Query var quests: [Quest]
-    
+//    //　questの名前が一致するものを取得する
+//    static func sameNameQuest(nametitle:String) -> Predicate<Quest> {
+//        #Predicate<Quest> { quest in
+//            return quest.title == nametitle
+//        }
+//    }
+//    
+//    @Environment(\.modelContext) private var context
+//    @Query var quests: [Quest]
+//    
     func add() {
-        let uuid =  UUID()
-        do{
-            let descriptor = FetchDescriptor<Quest>(predicate: #Predicate<Quest>{$0.title == "笑顔でピース"})
-            let currentQuest = try context.fetch(descriptor).first
-            let data = Photo(saveDate: Date(), photoData: image.jpegData(compressionQuality: 1)!, scale: scale, center: position, registerSns: [], best: true,questTitle: "笑顔でピース",id: uuid)
-            context.insert(data)
-            try context.save()
-            print(currentQuest)
-        }catch{
-            print(error)
-        }
-        
+//        let uuid =  UUID()
+//        do{
+//            let descriptor = FetchDescriptor<Quest>(predicate: #Predicate<Quest>{$0.title == "笑顔でピース"})
+//            let currentQuest = try context.fetch(descriptor).first
+//            let data = Photo(saveDate: Date(), photoData: image.jpegData(compressionQuality: 1)!, scale: scale, center: position, registerSns: [], best: true,questTitle: "笑顔でピース",id: uuid)
+//            context.insert(data)
+//            try context.save()
+//            print(currentQuest)
+//        }catch{
+//            print(error)
+//        }
+//        
         
         
         

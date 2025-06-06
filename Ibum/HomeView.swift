@@ -84,7 +84,7 @@ struct HomeView: View {
                 
             }
             .navigationDestination(isPresented: $flag) {
-                CameraView()
+                CameraView(quest: $questTitle)
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationTitle($questTitle)
                     
