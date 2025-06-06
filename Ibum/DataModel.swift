@@ -16,8 +16,9 @@ final class Photo{
     var registerSns:[String]
     var best:Bool
     var questTitle:String
+    var id:UUID
     
-    init(saveDate: Date, photoData: Data, scale: CGFloat, center: CGPoint, registerSns: [String], best: Bool,questTitle:String) {
+    init(saveDate: Date, photoData: Data, scale: CGFloat, center: CGPoint, registerSns: [String], best: Bool,questTitle:String,id:UUID) {
         self.saveDate = saveDate
         self.photoData = photoData
         self.scale = scale
@@ -25,6 +26,7 @@ final class Photo{
         self.registerSns = registerSns
         self.best = best
         self.questTitle = questTitle
+        self.id = id
     }
 }
 
@@ -38,14 +40,14 @@ final class Photo{
 @Model
 final class Quest{
     var title:String
-    var phots:[Photo]
+    var ids:[UUID]
     var tags:[TagSet]
     var favorite:Bool
     var clear:Bool
     
-    init(title: String, phots: [Photo], tags: [TagSet], favorite: Bool, clear: Bool) {
+    init(title: String, ids: [UUID], tags: [TagSet], favorite: Bool, clear: Bool) {
         self.title = title
-        self.phots = phots
+        self.ids = ids
         self.tags = tags
         self.favorite = favorite
         self.clear = clear
