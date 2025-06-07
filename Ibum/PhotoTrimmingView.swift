@@ -8,6 +8,11 @@ import SwiftData
 //}
 
 struct PhotoTrimmingView: View {
+    let dismissToRoot: () -> Void
+    let onDismiss: () -> Void
+    
+//    @Environment(\.isPresentedCamera) private var isPresentedCamera
+    @Environment(\.dismiss) private var dismiss
     
     @Environment(\.modelContext) private var context
     @Query var quests: [Quest]
@@ -18,6 +23,11 @@ struct PhotoTrimmingView: View {
     @State var image:UIImage
     @State var questTitle:String = ""
     
+    @EnvironmentObject var shareValue: isPresenteCamera
+    
+    @StateObject private var isPresentedCamera = isPresenteCamera()
+    
+//    @Binding private var isPresentedCamera :Bool
    
 
         
@@ -97,6 +107,7 @@ struct PhotoTrimmingView: View {
            
         }
         .onAppear{
+            isPresentedCamera.isOn = false
             do{
                 print(quests.first)
             }catch{
@@ -106,15 +117,6 @@ struct PhotoTrimmingView: View {
         }
     }
     
-//    //　questの名前が一致するものを取得する
-//    static func sameNameQuest(nametitle:String) -> Predicate<Quest> {
-//        #Predicate<Quest> { quest in
-//            return quest.title == nametitle
-//        }
-//    }
-//    
-
-//    
     func add() {
         let uuid =  UUID()
         let uuidstring = uuid.uuidString
@@ -123,16 +125,14 @@ struct PhotoTrimmingView: View {
             let currentQuest = try context.fetch(descriptor).first
             let data = Photo(saveDate: Date(), photoData: image.jpegData(compressionQuality: 1)!, scale: scale, center: position, registerSns: [], best: true,questTitle: questTitle,id: uuidstring)
             context.insert(data)
-//            try context.save()
             currentQuest?.ids.append(uuidstring)
             print(currentQuest?.ids)
         }catch{
             print(error)
         }
-//        
-        
-        
-        
+        dismissToRoot()
+//        dismiss()
+        onDismiss()
 //        print(context)
         }
 }

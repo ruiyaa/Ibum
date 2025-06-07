@@ -12,7 +12,7 @@ struct IbumApp: App {
 
        init() {
            do {
-               container = try ModelContainer(for: Quest.self,Photo.self)
+               container = try ModelContainer(for: Schema([Quest.self,Photo.self]))
                // AppDelegateにModelContextを渡す
                AppDelegate.shared.modelContext = container.mainContext
            } catch {
@@ -20,10 +20,13 @@ struct IbumApp: App {
            }
        }
     
+    @StateObject private var isPresentedCamera = isPresenteCamera()
+    
     var body: some Scene {
         WindowGroup {
             HomeView()
                 .modelContainer(container)
+                .environmentObject(isPresentedCamera)
                 
         }
         
@@ -55,3 +58,8 @@ func seedInitialDataIfNeeded(modelContext: ModelContext) async {
     try? modelContext.save()
 }
 
+
+//extension EnvironmentValues {
+//    @Entry var isPresentedCamera: Bool = false
+//    
+//}
