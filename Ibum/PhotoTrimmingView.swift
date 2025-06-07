@@ -118,12 +118,13 @@ struct PhotoTrimmingView: View {
     func add() {
         let uuid =  UUID()
         do{
-//            let descriptor = FetchDescriptor<Quest>(predicate: #Predicate<Quest>{$0.title == "笑顔でピース"})
-//            let currentQuest = try context.fetch(descriptor).first
+            let descriptor = FetchDescriptor<Quest>(predicate: #Predicate<Quest>{$0.title == "笑顔でピース"})
+            let currentQuest = try context.fetch(descriptor).first
             let data = Photo(saveDate: Date(), photoData: image.jpegData(compressionQuality: 1)!, scale: scale, center: position, registerSns: [], best: true,questTitle: questTitle,id: uuid)
             context.insert(data)
-            try context.save()
-            print(quests)
+//            try context.save()
+            c
+            print(currentQuest)
         }catch{
             print(error)
         }

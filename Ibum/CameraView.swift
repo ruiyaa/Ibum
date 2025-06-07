@@ -5,6 +5,8 @@ import SwiftData
 
 class CameraViewController: UIViewController{
     
+    @Environment(\.modelContext) private var context
+    
     var quest:String = ""
     
     override func viewDidLoad(){
@@ -162,12 +164,16 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate{
         if let imageData = photo.fileDataRepresentation() {
             // Data型をUIImageオブジェクトに変換
             let uiImage = UIImage(data: imageData)!
+            
+            if let context = AppDelegate.shared.modelContext {
+                let controller = UIHostingController(rootView: PhotoTrimmingView(image: uiImage,questTitle:quest).environment(\.modelContext, context))
+                controller.modalPresentationStyle = .overFullScreen
+                print(quest)
+                present(controller, animated: true)
+            }
 //            // 写真ライブラリに画像を保存
 //            UIImageWriteToSavedPhotosAlbum(uiImage!, nil,nil,nil)
-            let controller = UIHostingController(rootView: PhotoTrimmingView(image: uiImage,questTitle:quest))
-            controller.modalPresentationStyle = .overFullScreen
-            print(quest)
-            present(controller, animated: true)
+           
 
         }
     }
@@ -195,6 +201,7 @@ struct CameraView: UIViewControllerRepresentable {
 //            if let controller = uiViewController as? CameraViewController{
 //                uiViewController.quest = quest
 //            }
+
             
         }
 }

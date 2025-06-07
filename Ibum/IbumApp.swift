@@ -4,11 +4,27 @@ import SwiftData
 @main
 struct IbumApp: App {
 //    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    // AppDelegateとの連携
+       @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
+       // SwiftData用のModelContainer
+       let container: ModelContainer
+
+       init() {
+           do {
+               container = try ModelContainer(for: Quest.self,Photo.self)
+               // AppDelegateにModelContextを渡す
+               AppDelegate.shared.modelContext = container.mainContext
+           } catch {
+               fatalError("ModelContainerの初期化に失敗しました: \(error)")
+           }
+       }
     
     var body: some Scene {
         WindowGroup {
             HomeView()
-                .modelContainer(for: [Quest.self,Photo.self],inMemory:true,isAutosaveEnabled: true)
+                .modelContainer(container)
+                
         }
         
     }

@@ -73,6 +73,7 @@ struct HomeView: View {
                     for item in questdatabase.items{
                         context.insert(item)
                     }
+                    print("saved2")
                 }
                 do{
                     
