@@ -10,12 +10,12 @@ import SwiftData
 @Model
 final class Quest{
     var title:String
-    var ids:[UUID]
+    var ids:[String]
     var tags:[TagSet]
     var favorite:Bool
     var clear:Bool
     
-    init(title: String, ids: [UUID], tags: [TagSet], favorite: Bool, clear: Bool) {
+    init(title: String, ids: [String], tags: [TagSet], favorite: Bool, clear: Bool) {
         self.title = title
         self.ids = ids
         self.tags = tags
