@@ -11,44 +11,24 @@ import SwiftData
 final class Photo{
     var saveDate:Date
     var photoData:Data
-    var scale:CGFloat
-    var center:CGPoint
+    var scale:Double
+    var centerX:Double
+    var centerY:Double
     var registerSns:[String]
     var best:Bool
     var questTitle:String
+    var id:String
     
-    init(saveDate: Date, photoData: Data, scale: CGFloat, center: CGPoint, registerSns: [String], best: Bool,questTitle:String) {
+    init(saveDate: Date, photoData: Data, scale: Double, centerX: Double, centerY: Double, registerSns: [String], best: Bool, questTitle: String, id: String) {
         self.saveDate = saveDate
         self.photoData = photoData
         self.scale = scale
-        self.center = center
+        self.centerX = centerX
+        self.centerY = centerY
         self.registerSns = registerSns
         self.best = best
         self.questTitle = questTitle
-    }
-}
-
-//クエスト
-//・タグ
-//・お気に入り
-//・画像データ
-//・クリア済か否か
-//・タイトル
-
-@Model
-final class Quest{
-    var title:String
-    var phots:[Photo]
-    var tags:[TagSet]
-    var favorite:Bool
-    var clear:Bool
-    
-    init(title: String, phots: [Photo], tags: [TagSet], favorite: Bool, clear: Bool) {
-        self.title = title
-        self.phots = phots
-        self.tags = tags
-        self.favorite = favorite
-        self.clear = clear
+        self.id = id
     }
 }
 

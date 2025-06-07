@@ -1,8 +1,15 @@
 import AVFoundation
 import UIKit
 import SwiftUI
+import SwiftData
 
 class CameraViewController: UIViewController{
+    
+    var dismissToRoot: (() -> Void)?
+    
+    @StateObject private var isPresentedCamera = isPresenteCamera()
+    
+    @Environment(\.modelContext) private var context
     
     var quest:String = ""
     
@@ -161,29 +168,71 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate{
         if let imageData = photo.fileDataRepresentation() {
             // Data型をUIImageオブジェクトに変換
             let uiImage = UIImage(data: imageData)!
+            
+            if let context = AppDelegate.shared.modelContext {
+
+                    let trimmingView = PhotoTrimmingView (
+                        dismissToRoot: {
+                            self.dismiss(animated: false) {  // まずViewControllerを閉じる
+                                self.dismissToRoot?()  // HomeViewまで戻す
+                            }
+                        },
+                        onDismiss: {},
+                        image: uiImage,
+                        questTitle:quest
+                        
+                    ).environment(\.modelContext, context)
+                let controller = UIHostingController(rootView:trimmingView)
+                controller.modalPresentationStyle = .overFullScreen
+                print(quest)
+                present(controller, animated: true)
+            }
 //            // 写真ライブラリに画像を保存
 //            UIImageWriteToSavedPhotosAlbum(uiImage!, nil,nil,nil)
-            let controller = UIHostingController(rootView: PhotoTrimmingView(image: uiImage))
-            controller.modalPresentationStyle = .overFullScreen
-            present(controller, animated: true)
+           
 
         }
     }
 }
 
 struct CameraView: UIViewControllerRepresentable {
-//    @Binding var quest:String
+    @Binding var quest:String
+    @Binding var isActive: Bool
+    
+//    @Environment(\.isPresentedCamera) var isPresented
+    @Environment(\.dismiss) var dismiss
+    
+    @EnvironmentObject var shareValue: isPresenteCamera
+    
+    @StateObject private var isPresentedCamera = isPresenteCamera()
     
     // UIViewControllerを作成するメソッド
         func makeUIViewController(context: Context) -> UIViewController {
+            print("aaa")
             // 指定のUIViewControllerを作成する
-            let cameraViewController: UIViewController = CameraViewController()
-//            cameraViewController.quest = quest
+            if let controller = CameraViewController() as? CameraViewController{
+                print("hoge")
+                controller.quest = quest
+                controller.dismissToRoot = {
+                    isActive = false  // NavigationLinkの状態を false → pop に戻す
+                }
+                return controller
+            }
+            print("hogehoge")
+            let cameraViewController = CameraViewController()
             return cameraViewController
         }
 
         // UIViewControllerを更新するメソッド
         func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-            // UIViewControllerを更新したときの処理
+
+            
+//            print(isPresentedCamera.isOn)
+//            if !isPresentedCamera.isOn{
+////                isPresentedCamera.isOn = true
+//                dismiss()
+//            }
+
+            
         }
 }

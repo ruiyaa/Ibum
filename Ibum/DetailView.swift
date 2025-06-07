@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import _SwiftData_SwiftUI
 
 struct DetailView: View {
-    @State var position:CGPoint
+//    @State var position:CGPoint
     @State var scale:CGFloat = 1
     @State var width = UIScreen.main.bounds.width / 4 * 3
+    @Binding var photo:Photo
+    @Query private var quests: [Quest]
     
     var body: some View {
         ZStack{
@@ -21,10 +24,10 @@ struct DetailView: View {
 
             VStack{
                 Spacer()
-                Text("タイトルを入力")
+                Text(photo.questTitle)
                     .font(.largeTitle)
-                Color.cyan
-    //                .resizable()
+                Image(uiImage: UIImage(data: photo.photoData)!)
+                    .resizable()
                     .scaleEffect(scale)
                     .frame(width: width)
                     .clipShape(Circle())
@@ -77,6 +80,6 @@ struct DetailView: View {
     }
 }
 
-#Preview {
-    DetailView(position: CGPoint(x: 500, y: 500))
-}
+//#Preview {
+//    DetailView(position: CGPoint(x: 500, y: 500))
+//}

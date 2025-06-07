@@ -8,13 +8,26 @@ import SwiftData
 //}
 
 struct PhotoTrimmingView: View {
+    let dismissToRoot: () -> Void
+    let onDismiss: () -> Void
+    
+//    @Environment(\.isPresentedCamera) private var isPresentedCamera
+    @Environment(\.dismiss) private var dismiss
+    
     @Environment(\.modelContext) private var context
+    @Query var quests: [Quest]
     
     @State private var scale: CGFloat = 1.01
     @State var position: CGPoint = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
     
     @State var image:UIImage
+    @State var questTitle:String = ""
     
+    @EnvironmentObject var shareValue: isPresenteCamera
+    
+    @StateObject private var isPresentedCamera = isPresenteCamera()
+    
+//    @Binding private var isPresentedCamera :Bool
    
 
         
@@ -93,12 +106,33 @@ struct PhotoTrimmingView: View {
             }
            
         }
+        .onAppear{
+            isPresentedCamera.isOn = false
+            do{
+                print(quests.first)
+            }catch{
+                print(error)
+            }
+            
+        }
     }
     
-    private func add() {
-        let data = Photo(saveDate: Date(), photoData: image.jpegData(compressionQuality: 1)!, scale: scale, center: position, registerSns: [], best: true,questTitle: "笑顔でピース")
-//        print(data)
+    func add() {
+        let uuid =  UUID()
+        let uuidstring = uuid.uuidString
+        do{
+            let descriptor = FetchDescriptor<Quest>(predicate: #Predicate<Quest>{$0.title == questTitle})
+            let currentQuest = try context.fetch(descriptor).first
+            let data = Photo(saveDate: Date(), photoData: image.jpegData(compressionQuality: 1)!, scale: Double(scale), centerX: Double(position.x), centerY: Double(position.y), registerSns: [], best: false, questTitle: questTitle, id: uuidstring)
             context.insert(data)
+            currentQuest?.ids.append(uuidstring)
+            print(currentQuest?.ids)
+        }catch{
+            print(error)
+        }
+        dismissToRoot()
+//        dismiss()
+        onDismiss()
 //        print(context)
         }
 }
