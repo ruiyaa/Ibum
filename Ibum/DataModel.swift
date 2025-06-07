@@ -16,9 +16,9 @@ final class Photo{
     var registerSns:[String]
     var best:Bool
     var questTitle:String
-    var id:UUID
+    var id:String
     
-    init(saveDate: Date, photoData: Data, scale: CGFloat, center: CGPoint, registerSns: [String], best: Bool,questTitle:String,id:UUID) {
+    init(saveDate: Date, photoData: Data, scale: CGFloat, center: CGPoint, registerSns: [String], best: Bool,questTitle:String,id:String) {
         self.saveDate = saveDate
         self.photoData = photoData
         self.scale = scale
