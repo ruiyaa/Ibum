@@ -31,41 +31,32 @@ struct HomeView: View {
                                     Image(systemName: (quest.clear ? "star.fill" : "star"))
                                 }
                                 Text(String(quest.title))
-    //                            Text(String(quest.title))
-    //                            Image(uiimage: UIImage(data: quest.phots.first?.photoData))
-                                if let photoData = quest.phots.first?.photoData,
-                                   let uiImage = UIImage(data: photoData) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 80)
-                                        .clipShape(Circle())
-                                        .shadow(radius: 3)
-                                } else {
-                                    Image(systemName: "camera")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 80)
-                                        .clipShape(Circle())
-                                        .shadow(radius: 3)
-                                }
-    //                            Image(uiImage: quest.phots.isEmpty ?  UIImage(systemName: "camera") : UIImage(data: quest.phots.first?.photoData))
-    //                                .resizable()
-    //                                .scaledToFit()
-    //                                .frame(width: 80)
-    //                                .clipShape(Circle())
-    //                                .shadow(radius: 3)
+//                                if let photoData = quest.id.first?,
+//                                   let
+//                                   let uiImage = UIImage(data: photoData) {
+//                                    Image(uiImage: uiImage)
+//                                        .resizable()
+//                                        .scaledToFit()
+//                                        .frame(width: 80)
+//                                        .clipShape(Circle())
+//                                        .shadow(radius: 3)
+//                                } else {
+//                                    Image(systemName: "camera")
+//                                        .resizable()
+//                                        .scaledToFit()
+//                                        .frame(width: 80)
+//                                        .clipShape(Circle())
+//                                        .shadow(radius: 3)
+//                                }
                             }
                         }
-//                        .backgroundStyle(.white)
-//                        .shadow(radius: 3)
-//                        .border(.gray, width: 2)
                         .frame(width:UIScreen.main.bounds.width / 2 - 30 , height: (UIScreen.main.bounds.width / 2 - 30) / 4 * 5)
                         .onTapGesture {
                             let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
                             if status == AVAuthorizationStatus.authorized {
                                 questTitle = quest.title
                                 flag = true
+                                print(quests.first)
                             }else{
                                 AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
                                 })
@@ -82,10 +73,19 @@ struct HomeView: View {
                     for item in questdatabase.items{
                         context.insert(item)
                     }
+                    print("saved2")
                 }
+                do{
+                    
+                    try context.save()
+                    print("saved")
+                }catch{
+                    print(error)
+                }
+                
             }
             .navigationDestination(isPresented: $flag) {
-                CameraView()
+                CameraView(quest: $questTitle)
                     .navigationBarTitleDisplayMode(.inline)
                     .navigationTitle($questTitle)
                     

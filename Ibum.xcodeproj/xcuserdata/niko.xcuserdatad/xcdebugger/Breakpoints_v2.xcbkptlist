@@ -3,4 +3,22 @@
    uuid = "D3C4E607-DEE3-4C84-A533-CCD1D2998BD4"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "04F6B337-BFF4-49AE-AE75-B9696359A946"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../../var/folders/xq/w2hpcvm56h506vm6yqvqncz80000gn/T/swift-generated-sources/@__swiftmacro_4Ibum0028PhotoTrimmingViewswift_IxAFhfMX100_8_9PredicatefMf_.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1"
+            endingLineNumber = "1"
+            landmarkName = "sameNameQuest(nametitle:)"
+            landmarkType = "37">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

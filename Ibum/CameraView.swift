@@ -1,8 +1,11 @@
 import AVFoundation
 import UIKit
 import SwiftUI
+import SwiftData
 
 class CameraViewController: UIViewController{
+    
+    @Environment(\.modelContext) private var context
     
     var quest:String = ""
     
@@ -161,29 +164,44 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate{
         if let imageData = photo.fileDataRepresentation() {
             // Data型をUIImageオブジェクトに変換
             let uiImage = UIImage(data: imageData)!
+            
+            if let context = AppDelegate.shared.modelContext {
+                let controller = UIHostingController(rootView: PhotoTrimmingView(image: uiImage,questTitle:quest).environment(\.modelContext, context))
+                controller.modalPresentationStyle = .overFullScreen
+                print(quest)
+                present(controller, animated: true)
+            }
 //            // 写真ライブラリに画像を保存
 //            UIImageWriteToSavedPhotosAlbum(uiImage!, nil,nil,nil)
-            let controller = UIHostingController(rootView: PhotoTrimmingView(image: uiImage))
-            controller.modalPresentationStyle = .overFullScreen
-            present(controller, animated: true)
+           
 
         }
     }
 }
 
 struct CameraView: UIViewControllerRepresentable {
-//    @Binding var quest:String
+    @Binding var quest:String
     
     // UIViewControllerを作成するメソッド
         func makeUIViewController(context: Context) -> UIViewController {
             // 指定のUIViewControllerを作成する
-            let cameraViewController: UIViewController = CameraViewController()
-//            cameraViewController.quest = quest
+            if let controller = CameraViewController() as? CameraViewController{
+                print("hoge")
+                controller.quest = quest
+                return controller
+            }
+            print("hogehoge")
+            let cameraViewController = CameraViewController()
             return cameraViewController
         }
 
         // UIViewControllerを更新するメソッド
         func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
             // UIViewControllerを更新したときの処理
+//            if let controller = uiViewController as? CameraViewController{
+//                uiViewController.quest = quest
+//            }
+
+            
         }
 }

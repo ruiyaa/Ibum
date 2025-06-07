@@ -1,22 +1,32 @@
-//
-//  IbumApp.swift
-//  Ibum
-//
-//  Created by tanaka niko on 2025/05/30.
-//
-
 import SwiftUI
 import SwiftData
 
 @main
 struct IbumApp: App {
 //    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    // AppDelegateとの連携
+       @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
+       // SwiftData用のModelContainer
+       let container: ModelContainer
+
+       init() {
+           do {
+               container = try ModelContainer(for: Quest.self,Photo.self)
+               // AppDelegateにModelContextを渡す
+               AppDelegate.shared.modelContext = container.mainContext
+           } catch {
+               fatalError("ModelContainerの初期化に失敗しました: \(error)")
+           }
+       }
     
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .modelContainer(container)
+                
         }
-        .modelContainer(for: [Quest.self,Photo.self])
+        
     }
         
     
@@ -31,11 +41,11 @@ func seedInitialDataIfNeeded(modelContext: ModelContext) async {
     }
     
     let items = [
-        Quest(title: "笑顔でピース", phots: [], tags: [.kantan,.genki], favorite: false, clear: false),
-        Quest(title: "自信のかたまり", phots: [], tags: [.cool,.zensin], favorite: false, clear: false),
-        Quest(title: "横顔", phots: [], tags: [.cool,.kao], favorite: false, clear: false),
-        Quest(title: "風になびく", phots: [], tags: [.cool], favorite: false, clear: false),
-        Quest(title: "お願いの姿勢", phots: [], tags: [.kantan,.zensin], favorite: false, clear: false)
+        Quest(title: "笑顔でピース", ids: [], tags: [.kantan,.genki], favorite: false, clear: false),
+        Quest(title: "自信のかたまり", ids: [], tags: [.cool,.zensin], favorite: false, clear: false),
+        Quest(title: "横顔", ids: [], tags: [.cool,.kao], favorite: false, clear: false),
+        Quest(title: "風になびく", ids: [], tags: [.cool], favorite: false, clear: false),
+        Quest(title: "お願いの姿勢", ids: [], tags: [.kantan,.zensin], favorite: false, clear: false)
     ]
 
     for item in items {
