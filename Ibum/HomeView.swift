@@ -111,8 +111,7 @@ struct HomeView: View {
                     print("saved2")
                 }
                 do{
-                    
-//                    try context.save()
+                    try context.save()
                     print("saved")
                 }catch{
                     print(error)

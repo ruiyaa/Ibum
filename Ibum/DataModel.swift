@@ -11,18 +11,20 @@ import SwiftData
 final class Photo{
     var saveDate:Date
     var photoData:Data
-    var scale:CGFloat
-    var center:CGPoint
+    var scale:Double
+    var centerX:Double
+    var centerY:Double
     var registerSns:[String]
     var best:Bool
     var questTitle:String
     var id:String
     
-    init(saveDate: Date, photoData: Data, scale: CGFloat, center: CGPoint, registerSns: [String], best: Bool,questTitle:String,id:String) {
+    init(saveDate: Date, photoData: Data, scale: Double, centerX: Double, centerY: Double, registerSns: [String], best: Bool, questTitle: String, id: String) {
         self.saveDate = saveDate
         self.photoData = photoData
         self.scale = scale
-        self.center = center
+        self.centerX = centerX
+        self.centerY = centerY
         self.registerSns = registerSns
         self.best = best
         self.questTitle = questTitle

@@ -173,7 +173,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate{
 
                     let trimmingView = PhotoTrimmingView (
                         dismissToRoot: {
-                            self.dismiss(animated: true) {  // まずViewControllerを閉じる
+                            self.dismiss(animated: false) {  // まずViewControllerを閉じる
                                 self.dismissToRoot?()  // HomeViewまで戻す
                             }
                         },

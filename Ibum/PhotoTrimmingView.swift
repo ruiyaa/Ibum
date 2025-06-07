@@ -123,7 +123,7 @@ struct PhotoTrimmingView: View {
         do{
             let descriptor = FetchDescriptor<Quest>(predicate: #Predicate<Quest>{$0.title == questTitle})
             let currentQuest = try context.fetch(descriptor).first
-            let data = Photo(saveDate: Date(), photoData: image.jpegData(compressionQuality: 1)!, scale: scale, center: position, registerSns: [], best: true,questTitle: questTitle,id: uuidstring)
+            let data = Photo(saveDate: Date(), photoData: image.jpegData(compressionQuality: 1)!, scale: Double(scale), centerX: Double(position.x), centerY: Double(position.y), registerSns: [], best: false, questTitle: questTitle, id: uuidstring)
             context.insert(data)
             currentQuest?.ids.append(uuidstring)
             print(currentQuest?.ids)
