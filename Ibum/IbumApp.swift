@@ -12,7 +12,7 @@ struct IbumApp: App {
 
        init() {
            do {
-               container = try ModelContainer(for: Schema([Quest.self,Photo.self]))
+               container = try ModelContainer(for: Quest.self,Photo.self)
                // AppDelegateにModelContextを渡す
                AppDelegate.shared.modelContext = container.mainContext
            } catch {
