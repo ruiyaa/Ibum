@@ -17,6 +17,7 @@ struct HomeView: View {
     @Environment(\.modelContext) private var context
     
     
+    
     @StateObject private var isPresentedCamera = isPresenteCamera()
     
     @State  var chosenQuestPhoto:Photo = Photo(saveDate: Date(), photoData: Data(), scale: 1, centerX: 1, centerY: 1, registerSns: [], best: false, questTitle: "", id: "")
@@ -32,25 +33,41 @@ struct HomeView: View {
     var body: some View {
         
         NavigationStack{
-            ScrollView(.vertical){
-                LazyVGrid(columns: columns, spacing:10){
-                    ForEach(quests,id:\.self){ quest in
-                       
+            ZStack{
+                LinearGradient(gradient: Gradient(colors: [Color.white,Color(red: 151/255, green: 254/255, blue: 237/255),Color.white]),startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
+                ScrollView(.vertical){
+                    LazyVGrid(columns: columns, spacing:10){
+                        ForEach(quests,id:\.self){ quest in
+                            
                             ZStack{
                                 RoundedRectangle(cornerRadius: 20, style: .circular)
                                     .fill(.white)
                                     .frame(width:UIScreen.main.bounds.width / 2 - 30 , height: (UIScreen.main.bounds.width / 2 - 30) / 4 * 5)
-                                    .shadow(radius: 3)
+                                //                                    .background()
+                                
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(LinearGradient(gradient: Gradient(colors: [Color(red: 151/255, green: 254/255, blue: 237/255),Color(red: 53/255, green: 162/255, blue: 159/255)]),startPoint: .top, endPoint: .bottom), lineWidth: 3)
+                                            .shadow(radius: 5)
+                                    )
                                 
                                 VStack{
+                                    
                                     HStack{
+                                        
                                         ForEach(quest.tags,id:\.self){tag in
                                             Text("#" + String(tag.rawValue))
+                                                .fontWeight(.light)
                                         }
+                                        
                                         Spacer()
                                         Image(systemName: (quest.clear ? "star.fill" : "star"))
+                                            .padding(.trailing,10)
                                     }
                                     Text(String(quest.title))
+                                        .fontWeight(.semibold
+                                        )
                                     if let idd = quest.ids.first{
                                         let descriptor = FetchDescriptor<Photo>(predicate: #Predicate<Photo>{$0.id == idd})
                                         if let currentPhoto = try! context.fetch(descriptor).first as? Photo,
@@ -63,93 +80,117 @@ struct HomeView: View {
                                                 .shadow(radius: 3)
                                         }
                                     } else {
-                                        Image(systemName: "camera")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 80)
-                                            .clipShape(Circle())
-                                            .shadow(radius: 3)
-                                    }
-                                    
-                                    
-                                }
-                            }
-                            .frame(width:UIScreen.main.bounds.width / 2 - 30 , height: (UIScreen.main.bounds.width / 2 - 30) / 4 * 5)
-                            .onTapGesture {
-                                let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
-                                if status == AVAuthorizationStatus.authorized {
-                                    questTitle = quest.title
-                                    print(quests.first)
-                                    
-                                    if(!quest.ids.isEmpty){
-                                        if let idd = quest.ids.first{
-                                            let descriptor = FetchDescriptor<Photo>(predicate: #Predicate<Photo>{$0.id == idd})
-                                            if let currentPhoto = try! context.fetch(descriptor).first as? Photo{
-                                                chosenQuestPhoto = currentPhoto
-                                                showDetailView = true
-                                            }
+                                        if let image = UIImage(named: String(quest.title)){
+                                            Image(uiImage:image)
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 80,height:80)
+                                                .clipShape(Circle())
+                                                .shadow(radius: 3)
+                                                .overlay() {
+                                                    Circle()
+                                                        .stroke(.black, lineWidth: 2)
+                                                        .frame(width: 80)
+                                                    
+                                                }
+                                        }else{
+                                            Image(systemName: "camera")
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 80,height:80)
+                                                .clipShape(Circle())
+                                                .shadow(radius: 3)
+                                                .overlay() {
+                                                    Circle()
+                                                        .stroke(.black, lineWidth: 2)
+                                                        .frame(width: 80)
+                                                    
+                                                }
+                                            
+                                            
                                         }
+                                        
+                                        
+                                    }
+                                }
+                                .frame(width:UIScreen.main.bounds.width / 2 - 30 , height: (UIScreen.main.bounds.width / 2 - 30) / 4 * 5)
+                                .onTapGesture {
+                                    let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+                                    if status == AVAuthorizationStatus.authorized {
+                                        questTitle = quest.title
+                                        print(quests.first)
+                                        
+                                        if(!quest.ids.isEmpty){
+                                            if let idd = quest.ids.first{
+                                                let descriptor = FetchDescriptor<Photo>(predicate: #Predicate<Photo>{$0.id == idd})
+                                                if let currentPhoto = try! context.fetch(descriptor).first as? Photo{
+                                                    chosenQuestPhoto = currentPhoto
+                                                    showDetailView = true
+                                                }
+                                            }
+                                            
+                                            
+                                            
+                                        }else{
+                                            showViewController = true
+                                        }
+                                        //                                isPresented = true
+                                        //                                    isPresentedCamera.isOn = true
+                                        print("aaaaafsdf")
                                         
                                         
                                         
                                     }else{
-                                        showViewController = true
+                                        AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
+                                            //                                        showViewController = true
+                                        })
                                     }
-                                    //                                isPresented = true
-//                                    isPresentedCamera.isOn = true
-                                    print("aaaaafsdf")
-                                    
-                                    
-                                    
-                                }else{
-                                    AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
-//                                        showViewController = true
-                                    })
                                 }
                             }
+                            
+                            
+                            
+                            
                         }
                         
-                    
-                    
-                    
-                }
-
-            }
-            .onAppear{
-                let questdatabase = QuestDatabase()
-                if quests.isEmpty{
-                    for item in questdatabase.items{
-                        context.insert(item)
                     }
-                    print("saved2")
+                    .onAppear{
+                        let questdatabase = QuestDatabase()
+                        if quests.isEmpty{
+                            for item in questdatabase.items{
+                                context.insert(item)
+                            }
+                            print("saved2")
+                        }
+                        do{
+                            try context.save()
+                            print("saved")
+                        }catch{
+                            print(error)
+                        }
+                        
+                    }
                 }
-                do{
-                    try context.save()
-                    print("saved")
-                }catch{
-                    print(error)
+                
+                .navigationTitle("クエスト一覧")
+                .navigationBarTitleDisplayMode(.large)
+                .navigationDestination(isPresented: $showViewController){
+                    CameraView(quest: $questTitle,isActive: $showViewController)
+                        .navigationBarTitleDisplayMode(.inline)
+                        .navigationTitle($questTitle)
+                }
+                .sheet(isPresented:$showDetailView){
+                    DetailView(photo: $chosenQuestPhoto,title:chosenQuestPhoto.questTitle)
                 }
                 
             }
-            .navigationTitle("クエスト一覧")
-            .navigationBarTitleDisplayMode(.large)
-            .navigationDestination(isPresented: $showViewController){
-                CameraView(quest: $questTitle,isActive: $showViewController)
-                    .navigationBarTitleDisplayMode(.inline)
-                    .navigationTitle($questTitle)
-            }
-            .sheet(isPresented:$showDetailView){
-                DetailView(photo: $chosenQuestPhoto)
-            }
+            
+            
             
         }
         
-        
-        
     }
-
 }
-
 //#Preview {
 //    HomeView()
 //}

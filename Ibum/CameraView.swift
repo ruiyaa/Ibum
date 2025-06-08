@@ -97,6 +97,8 @@ class CameraViewController: UIViewController{
         self.cameraPreviewLayer?.frame = cameraUIview.frame
         cameraUIview.layer.insertSublayer(self.cameraPreviewLayer!, at: 0)
         
+        captureSession.startRunning()
+        
     }
     
     func setupSilhouetteView(){
@@ -107,11 +109,24 @@ class CameraViewController: UIViewController{
 //        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: .none)
         
         //シルエット表示用のviewを作成
-        lazy var silhouetteUIview = UIView()
+        lazy var silhouetteUIview = UIImageView()
         silhouetteUIview.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: self.view.frame.width, height: self.view.frame.width / 9 * 16))
+        silhouetteUIview.image = UIImage(named: String(quest) + ".PNG")
+        silhouetteUIview.alpha = 0.5
+        silhouetteUIview.backgroundColor = .systemPink
+        silhouetteUIview.contentMode = .scaleToFill
         self.view.addSubview(silhouetteUIview)
         silhouetteUIview.translatesAutoresizingMaskIntoConstraints = false
         silhouetteUIview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        
+        lazy var latticeUIview = UIImageView()
+        latticeUIview.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: self.view.frame.width, height: self.view.frame.width / 9 * 16))
+        latticeUIview.image = UIImage(named: "lattice.PNG")
+        latticeUIview.contentMode = .scaleToFill
+        latticeUIview.backgroundColor = .green
+        self.view.addSubview(latticeUIview)
+        latticeUIview.translatesAutoresizingMaskIntoConstraints = false
+        latticeUIview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
 
         
         //toggleボタンを作成
@@ -120,7 +135,7 @@ class CameraViewController: UIViewController{
         toggle.onTintColor = .init(red: 151/255, green: 254/255, blue: 237/255, alpha: 1)
         self.view.addSubview(toggle)
         toggle.translatesAutoresizingMaskIntoConstraints = false
-        toggle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -10).isActive = true
+        toggle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         toggle.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
         
     }
@@ -143,7 +158,7 @@ class CameraViewController: UIViewController{
         shutterButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
         shutterButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -50).isActive = true
         
-        captureSession.startRunning()
+        
         
     }
     
@@ -168,7 +183,8 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate{
         if let imageData = photo.fileDataRepresentation() {
             // Data型をUIImageオブジェクトに変換
             let uiImage = UIImage(data: imageData)!
-            
+            uiImage.cgImage?.cropping(to: CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: self.view.frame.width, height: self.view.frame.width / 9 * 16)))
+//            uiImage.size =  /*CGSize(width: self.view.frame.width, height: self.view.frame.width / 9 * 16)*/
             if let context = AppDelegate.shared.modelContext {
 
                     let trimmingView = PhotoTrimmingView (
