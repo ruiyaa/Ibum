@@ -5,6 +5,8 @@ import SwiftData
 
 class CameraViewController: UIViewController{
     
+    lazy var silhouetteUIview = UIImageView()
+    
     var dismissToRoot: (() -> Void)?
     
     @StateObject private var isPresentedCamera = isPresenteCamera()
@@ -12,6 +14,8 @@ class CameraViewController: UIViewController{
     @Environment(\.modelContext) private var context
     
     var quest:String = ""
+    
+    var flag = true
     
     override func viewDidLoad(){
         super.viewDidLoad()
@@ -109,24 +113,30 @@ class CameraViewController: UIViewController{
 //        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: .none)
         
         //シルエット表示用のviewを作成
-        lazy var silhouetteUIview = UIImageView()
+        
         silhouetteUIview.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: self.view.frame.width, height: self.view.frame.width / 9 * 16))
         silhouetteUIview.image = UIImage(named: String(quest) + ".PNG")
-        silhouetteUIview.alpha = 0.5
-        silhouetteUIview.backgroundColor = .systemPink
+        silhouetteUIview.alpha = (flag ? 0.5 : 0)
+//        silhouetteUIview.backgroundColor = .systemPink
         silhouetteUIview.contentMode = .scaleToFill
         self.view.addSubview(silhouetteUIview)
         silhouetteUIview.translatesAutoresizingMaskIntoConstraints = false
         silhouetteUIview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        silhouetteUIview.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        silhouetteUIview.heightAnchor.constraint(equalToConstant: self.view.frame.width / 9 * 16).isActive = true
+        silhouetteUIview.widthAnchor.constraint(equalToConstant: self.view.frame.width ).isActive = true
         
         lazy var latticeUIview = UIImageView()
         latticeUIview.frame = CGRect(origin: CGPoint(x: 0, y: 0), size: CGSize(width: self.view.frame.width, height: self.view.frame.width / 9 * 16))
         latticeUIview.image = UIImage(named: "lattice.PNG")
         latticeUIview.contentMode = .scaleToFill
-        latticeUIview.backgroundColor = .green
         self.view.addSubview(latticeUIview)
         latticeUIview.translatesAutoresizingMaskIntoConstraints = false
         latticeUIview.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        latticeUIview.heightAnchor.constraint(equalToConstant: self.view.frame.width / 9 * 16).isActive = true
+        latticeUIview.widthAnchor.constraint(equalToConstant: self.view.frame.width).isActive = true
+        latticeUIview.centerXAnchor.constraint(equalTo: self.view.centerXAnchor)
+        
 
         
         //toggleボタンを作成
@@ -137,6 +147,8 @@ class CameraViewController: UIViewController{
         toggle.translatesAutoresizingMaskIntoConstraints = false
         toggle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         toggle.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -10).isActive = true
+        
+        toggle.addTarget(self, action: #selector(toggleChange), for: .valueChanged)
         
     }
     
@@ -174,6 +186,10 @@ class CameraViewController: UIViewController{
         
     }
 
+    @objc func toggleChange(){
+        flag.toggle()
+        silhouetteUIview.alpha = (flag ? 0.5 : 0)
+    }
 
 }
 

@@ -25,7 +25,7 @@ struct HomeView: View {
     @State var flag = false
     @State var questTitle = ""
     
-    let columns = [GridItem(.flexible()), GridItem(.flexible())]
+    let columns = [GridItem(.flexible(),spacing: 5), GridItem(.flexible(),spacing: 5)]
     
     @State private var showViewController = false
     @State private var showDetailView = false
@@ -37,13 +37,13 @@ struct HomeView: View {
                 LinearGradient(gradient: Gradient(colors: [Color.white,Color(red: 151/255, green: 254/255, blue: 237/255),Color.white]),startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
                 ScrollView(.vertical){
-                    LazyVGrid(columns: columns, spacing:10){
+                    LazyVGrid(columns: columns,spacing: 5){
                         ForEach(quests,id:\.self){ quest in
                             
                             ZStack{
                                 RoundedRectangle(cornerRadius: 20, style: .circular)
                                     .fill(.white)
-                                    .frame(width:UIScreen.main.bounds.width / 2 - 30 , height: (UIScreen.main.bounds.width / 2 - 30) / 4 * 5)
+                                    .frame(width:UIScreen.main.bounds.width / 2 - 15 , height: (UIScreen.main.bounds.width / 2 - 10) / 4 * 5)
                                 //                                    .background()
                                 
                                     .overlay(
@@ -88,18 +88,29 @@ struct HomeView: View {
                                                 .clipShape(Circle())
                                                 .shadow(radius: 3)
                                                 .overlay() {
-                                                    Circle()
-                                                        .stroke(.black, lineWidth: 2)
-                                                        .frame(width: 80)
+                                                    ZStack{
+                                                        Image(systemName: "camera")
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .scaleEffect(0.5)
+                                                            .frame(width: 80,height:80)
+                                                            .foregroundStyle(.blue)
+                                                        Circle()
+                                                            .stroke(.black, lineWidth: 2)
+                                                            .frame(width: 80)
+                                                    }
+                                                    
                                                     
                                                 }
                                         }else{
                                             Image(systemName: "camera")
                                                 .resizable()
                                                 .scaledToFit()
+                                                .scaleEffect(0.5)
                                                 .frame(width: 80,height:80)
                                                 .clipShape(Circle())
                                                 .shadow(radius: 3)
+                                                .foregroundStyle(.blue)
                                                 .overlay() {
                                                     Circle()
                                                         .stroke(.black, lineWidth: 2)
@@ -113,7 +124,7 @@ struct HomeView: View {
                                         
                                     }
                                 }
-                                .frame(width:UIScreen.main.bounds.width / 2 - 30 , height: (UIScreen.main.bounds.width / 2 - 30) / 4 * 5)
+                                .frame(width:UIScreen.main.bounds.width / 2 - 15 , height: (UIScreen.main.bounds.width / 2 - 15) / 4 * 5)
                                 .onTapGesture {
                                     let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
                                     if status == AVAuthorizationStatus.authorized {
